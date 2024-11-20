@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vũ Trụ Tinh Không Thần Thông</title>
+    <style>
+        :root {
+            --neon-purple: #bc13fe;
+            --neon-blue: #13b0fe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background: #000;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Tinh Không Thần Thông - Background Stars */
+        .stars {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            box-shadow: -24vw -44vh 2px 2px #fff,
+                       38vw -4vh 0px 0px #fff,
+                       -20vw -48vh 1px 2px #fff,
+                       /* Thêm 100 ngôi sao nữa */
+                       24vw 44vh 2px 1px #fff;
+            animation: starsAnimation 50s linear infinite;
+            transform-style: preserve-3d;
+        }
+
+        /* Phi Thuyền Thần Thông */
+        .spaceship {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M12,2L4,12l8,10l8-10L12,2z"/></svg>');
+            background-size: contain;
+            transition: transform 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Hồng Mông Text */
+        .neon-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 5px var(--neon-purple),
+                        0 0 15px var(--neon-purple),
+                        0 0 30px var(--neon-purple);
+            animation: neonPulse 1.5s infinite alternate;
+        }
+
+        /* Thời Gian Thần Thông */
+        .clock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        /* Con Trỏ Tiên Khí */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-purple);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            z-index: 9999;
+        }
+
+        .cursor-fx {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            mix-blend-mode: difference;
+            z-index: 9998;
+        }
+
+        /* Animations */
+        @keyframes starsAnimation {
+            from {
+                transform: perspective(500px) rotateZ(0deg) rotateX(0deg);
+            }
+            to {
+                transform: perspective(500px) rotateZ(360deg) rotateX(360deg);
+            }
+        }
+
+        @keyframes neonPulse {
+            from {
+                filter: brightness(100%);
+            }
+            to {
+                filter: brightness(200%);
+            }
+        }
+
+        @keyframes ripple {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+            to {
+                transform: scale(100);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .neon-text {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="spaceship"></div>
+    <h1 class="neon-text">Tu Tiên Code</h1>
+    <div class="clock"></div>
+    <div class="cursor"></div>
+    <div class="cursor-fx"></div>
+
+    <script>
+        // Tiên Khí Con Trỏ
+        const cursor = document.querySelector('.cursor');
+        const cursorFx = document.querySelector('.cursor-fx');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorFx.style.left = e.clientX - 10 + 'px';
+            cursorFx.style.top = e.clientY - 10 + 'px';
+        });
+
+        // Phi Thuyền Thần Thông
+        const spaceship = document.querySelector('.spaceship');
+        let shots = [];
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX - 20;
+            const y = e.clientY - 20;
+            spaceship.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Click Thần Thông
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.style.position = 'fixed';
+            ripple.style.width = ripple.style.height = '2px';
+            ripple.style.background = `radial-gradient(circle, ${getComputedStyle(document.documentElement).getPropertyValue('--neon-purple')}, transparent)`;
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            ripple.style.borderRadius = '50%';
+            ripple.style.animation = 'ripple 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+
+            // Laser Shot
+            const laser = document.createElement('div');
+            laser.style.position = 'fixed';
+            laser.style.width = '2px';
+            laser.style.height = '10px';
+            laser.style.background = 'var(--neon-blue)';
+            laser.style.left = (e.clientX + 20) + 'px';
+            laser.style.top = e.clientY + 'px';
+            laser.style.boxShadow = '0 0 10px var(--neon-blue)';
+            document.body.appendChild(laser);
+            
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 10;
+            const dx = Math.cos(angle) * speed;
+            const dy = Math.sin(angle) * speed;
+            
+            shots.push({ element: laser, dx, dy });
+        });
+
+        // Thời Gian Thần Thông
+        const clock = document.querySelector('.clock');
+        setInterval(() => {
+            const now = new Date();
+            clock.textContent = now.toLocaleTimeString();
+        }, 1000);
+
+        // Animation Loop
+        function animate() {
+            shots.forEach((shot, index) => {
+                const currentLeft = parseFloat(shot.element.style.left);
+                const currentTop = parseFloat(shot.element.style.top);
+                
+                shot.element.style.left = (currentLeft + shot.dx) + 'px';
+                shot.element.style.top = (currentTop + shot.dy) + 'px';
+
+                if (currentLeft < 0 || currentLeft > window.innerWidth || 
+                    currentTop < 0 || currentTop > window.innerHeight) {
+                    shot.element.remove();
+                    shots.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
